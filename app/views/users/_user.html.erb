@@ -1,0 +1,33 @@
+<%# app/views/users/_user.html.erb %>
+<%= simple_form_for(user, url: '#', html: { class: 'space-y-3 w-full' }) do |f| %>
+  <div class="grid grid-cols-6 gap-6">
+    <div class="col-span-6 flex justify-center items-center">
+        <%= image_tag(user.profile_pic.present? ? user.profile_pic.url : 'default-profile-icon-3.jpg', class: 'w-32 h-32 object-cover rounded-full', alt: 'Profile Picture') %>
+    </div>
+
+    <div class="col-span-6 sm:col-span-3">
+        <%= f.label :name, 'Full Name', class: 'block mb-2 text-sm font-medium text-gray-900 dark:text-white' %>
+        <%= f.input_field :name, class: 'input input-bordered w-full', readonly: true %>
+    </div>
+
+    <div class="col-span-6 sm:col-span-3">
+        <%= f.label :email, 'Email', class: 'block mb-2 text-sm font-medium text-gray-900 dark:text-white' %>
+        <%= f.input_field :email, class: 'input input-bordered w-full', readonly: true %>
+    </div>
+
+    <div class="col-span-6">
+        <%= f.label :address, 'Address', class: 'block mb-2 text-sm font-medium text-gray-900 dark:text-white' %>
+        <%= f.text_area :address, style: "resize: none;", rows: "2", class: 'textarea textarea-bordered w-full', readonly: true %>
+    </div>
+
+    <div class="col-span-6 sm:col-span-3">
+        <%= f.label :phoneno, 'Phone Number', class: 'block mb-2 text-sm font-medium text-gray-900 dark:text-white' %>
+        <%= f.input_field :phoneno, class: 'input input-bordered w-full max-w-xs', readonly: true %>
+    </div>
+
+    <div class="col-span-6 sm:col-span-3">
+        <%= f.label :position, 'Position', class: 'block mb-2 text-sm font-medium text-gray-900 dark:text-white' %>
+        <%= f.input_field :position, class: 'input input-bordered w-full max-w-xs', readonly: true %>
+    </div>
+ </div>
+<% end %>

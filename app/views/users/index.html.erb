@@ -1,0 +1,99 @@
+<div class="mt-8"> <!-- Add top margin for the gap between navbar and table -->
+    <div class="flex justify-end pr-4"> <!-- Position the button to the top right -->
+        <!-- Open the modal using ID.showModal() method -->
+        <button class="btn btn-primary" onclick="my_modal_1.showModal()">Add User</button>
+    </div>
+
+    <div class="overflow-x-auto mt-4">
+        <div class="inline-block min-w-full align-middle">
+            <div class="overflow-hidden shadow">
+                <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600">
+                    <thead class="bg-gray-100 dark:bg-gray-700">
+                        <tr>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Name, Email</th>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Position</th>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Role</th>
+                            <th colspan="2" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                        <!-- Your user data loop goes here -->
+                        <% @users.each do |user| %>
+
+                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <td class="p-4">
+                                <div class="flex items-center">
+                                    <% if user.profile_pic.present? %>
+                                        <img class="w-10 h-10 rounded-full ml-2" src="<%= user.profile_pic %>" alt="<%= user.name %> avatar">
+                                    <% else %>
+                                        <img class="w-10 h-10 rounded-full ml-2" src="<%= asset_path('default-profile-icon-3.jpg') %>" alt="default avatar">
+                                    <% end %>
+                                    <div class="ml-2">
+                                        <div class="text-base font-semibold text-gray-900 dark:text-white"><%= user.name %></div>
+                                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= user.email %></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="p-4"><%= user.position %></td>
+                            <td class="p-4"><%= user.role %></td>
+                            <td class="p-4">
+                                <!--<button class="btn btn-primary" onclick="my_modal_2.showModal()">View User</button>
+                                <%= link_to "View User", user, class: 'inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900' %>-->
+                                <%= button_to "View User", '#', method: :get, class: 'inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900', onclick: "event.preventDefault(); document.getElementById('user-modal-#{user.id}').showModal();" %>
+
+                            </td>
+                            <td class="p-4">
+                                <%= button_to "Delete User", user_path(user), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete, class: 'inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900' %>
+                            </td>
+                        </tr>
+
+                        <!-- Repeat the above row structure for each user data -->
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal dialog element -->
+<dialog id="my_modal_1" class="modal">
+  <!-- Modal content -->
+  <div class="modal-box w-11/12 max-w-3xl rounded-lg">
+    <!-- Modal header -->
+    <div class="modal-header">
+      <h3 class="text-xl font-semibold dark:text-white">
+        Add new user
+      </h3>
+      <!-- Close button -->
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="my_modal_1.close()">✕</button>
+    </div>
+    <div class="modal-action">
+      <!-- Modal content rendered here -->
+      <%= render 'users/add_user_modal' %>
+    </div>
+  </div>
+</dialog>
+
+<!-- Modal for the user -->
+<% @users.each do |user| %>
+  <dialog id="user-modal-<%= user.id %>" class="fixed inset-0 flex items-center justify-center z-50 invisible opacity-0 pointer-events-none transition-all duration-300 modal">
+    <div class="modal-box w-11/12 max-w-3xl rounded-lg">
+      <!-- Modal header -->
+      <div class="modal-header">
+        <h3 class="text-xl font-semibold dark:text-white">
+            User Details
+        </h3>
+      <!-- Close button -->
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="document.getElementById('user-modal-<%= user.id %>').close()">✕</button>
+    </div>
+    <div class="modal-action">
+      <!-- Modal content rendered here -->
+                                        
+      <%= render 'users/user', user: user %>
+      
+    </div>
+  </div>
+  </dialog>
+<% end %>

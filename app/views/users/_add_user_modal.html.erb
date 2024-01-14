@@ -1,0 +1,50 @@
+<!-- app/views/shared/_registration_form.html.erb -->
+<%= simple_form_for(@user, url: users_path, html: { class: 'space-y-3 w-full' }) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="grid grid-cols-6 gap-6">
+    <div class="col-span-6">
+      <%= f.label :profile_pic, 'Profile Picture URL', class: 'block mb-2 text-sm font-medium text-gray-900 dark:text-white' %>
+      <%= f.input_field :profile_pic, placeholder: 'https://example.com/profile_pic.jpg', class: 'file-input file-input-bordered w-full' %>
+    </div>
+
+    <div class="col-span-6">
+      <%= f.label :name, 'Full Name', class: 'block mb-2 text-sm font-medium text-gray-900 dark:text-white' %>
+      <%= f.input_field :name, required: true, placeholder: 'John Doe', class: 'input input-bordered w-full' %>
+    </div>
+
+    <div class="col-span-6">
+      <%= f.label :address, 'Address', class: 'block mb-2 text-sm font-medium text-gray-900 dark:text-white' %>
+      <%= f.text_area :address, style: "resize: none;", rows: "2", placeholder: '123 Main St, City', class: 'textarea textarea-bordered w-full' %>
+    </div>
+
+    <div class="col-span-6 sm:col-span-3">
+      <%= f.label :phoneno, 'Phone Number', class: 'block mb-2 text-sm font-medium text-gray-900 dark:text-white' %>
+      <%= f.input_field :phoneno, placeholder: '+1234567890', class: 'input input-bordered w-full max-w-xs' %>
+    </div>
+
+    <div class="col-span-6 sm:col-span-3">
+      <%= f.label :position, 'Position', class: 'block mb-2 text-sm font-medium text-gray-900 dark:text-white' %>
+      <%= f.input_field :position, placeholder: 'e.g., Ruby on Rails Developer', class: 'input input-bordered w-full max-w-xs' %>
+    </div>
+
+    <div class="col-span-6">
+        <%= f.label :email, 'Email', class: 'block mb-2 text-sm font-medium text-gray-900 dark:text-white' %>
+        <%= f.input_field :email, required: true, placeholder: 'example@company.com', class: 'input input-bordered w-full' %>
+    </div>
+
+    <div class="col-span-6 sm:col-span-3">
+      <%= f.label :password, 'Password', class: 'block mb-2 text-sm font-medium text-gray-900 dark:text-white' %>
+      <%= f.input_field :password, required: true, placeholder: '********', hint: ('Minimum 8 characters' if @minimum_password_length), class: 'input input-bordered w-full max-w-xs' %>
+    </div>
+
+    <div class="col-span-6 sm:col-span-3">
+      <%= f.label :password_confirmation, 'Confirm Password', class: 'block mb-2 text-sm font-medium text-gray-900 dark:text-white' %>
+      <%= f.input_field :password_confirmation, required: true, placeholder: '********', class: 'input input-bordered w-full max-w-xs' %>
+    </div>
+  </div>
+
+  <div class="form-actions items-center p-3 border-t border-gray-200 rounded-b dark:border-gray-700">
+    <%= f.button :submit, 'Sign up', class: 'btn btn-neutral' %>
+  </div>
+<% end %>
