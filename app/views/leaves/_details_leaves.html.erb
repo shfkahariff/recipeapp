@@ -1,0 +1,43 @@
+<%= simple_form_for(leafe, url: '#', html: { class: 'space-y-3 w-full' }) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+    <div class="grid grid-cols-6 gap-6">
+        <div class="col-span-6">
+            <%= f.label :name, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+            <%= f.input_field :name, readonly: true, class:"input input-bordered w-full" %>
+        </div>
+        <div class="col-span-6">
+            <%= f.label :leave_balance_id, 'Leave Type', class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+            <%= f.text_field :leave_balance_id, readonly: true, class: "input input-bordered w-full", value: leafe.leave_balance.leavetype %>
+        </div>
+        <div class="col-span-6 sm:col-span-3">
+            <%= f.label :startDate, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+            <%= f.date_field :startDate, readonly: true, class: "input input-bordered w-full", placeholder: "Select date"  %>
+        </div>
+        <div class="col-span-6 sm:col-span-3">
+            <%= f.label :endDate, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+            <%= f.date_field :endDate, readonly: true, class: "input input-bordered w-full", placeholder: "Select date"  %>
+        </div>
+        <div class="col-span-6">
+            <%= f.label :duration, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+            <%= f.input_field :duration, readonly: true, class:"input input-bordered w-full", value: format_duration(leafe.duration) %>
+        </div>
+        <div class="col-span-6">
+            <% if leafe.attachment.present? %>
+                <%= f.label :attachment, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+                <%= f.url_field :attachment, class: "input input-bordered w-full" %>
+                    <p class="text-sm mt-2">
+                    <%= link_to "Open", leafe.attachment_url, target: "_blank", class: "text-blue-500 hover:underline" %>
+                    </p>
+            <% else %>
+                <%= f.label :attachment, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+                <p>No attachment provided</p>
+            <% end %>
+        </div>
+        <div class="col-span-6">
+            <%= f.label :notes, class:"block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+            <%= f.text_area :notes, readonly: true, style: "resize: none;", rows:"2", class:"textarea textarea-bordered w-full", placeholder:"Your Reason or Description" %>
+        </div>
+    </div>
+<% end %>

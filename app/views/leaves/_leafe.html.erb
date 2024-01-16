@@ -1,42 +1,87 @@
-<div id="<%= dom_id leafe %>">
-  <p>
-    <strong>Startdate:</strong>
-    <%= leafe.startDate %>
-  </p>
+<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="bg-white shadow overflow-hidden sm:rounded-lg">
 
-  <p>
-    <strong>Enddate:</strong>
-    <%= leafe.endDate %>
-  </p>
-
-  <p>
-    <strong>Duration:</strong>
-    <%= leafe.duration %>
-  </p>
-
-  <p>
-    <strong>Status:</strong>
-    <%= leafe.status %>
-  </p>
-
-  <p>
-    <strong>Notes:</strong>
-    <%= leafe.notes %>
-  </p>
-
-  <p>
-    <strong>Attachment:</strong>
-    <%= leafe.attachment %>
-  </p>
-
-  <p>
-    <strong>Name:</strong>
-    <%= leafe.name %>
-  </p>
-
-  <p>
-    <strong>Comment:</strong>
-    <%= leafe.comment %>
-  </p>
-
+    <div class="border-t border-gray-200">
+      <dl>
+        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">
+            Name
+          </dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= leafe.name %>
+          </dd>
+        </div>
+        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">
+            Type of Leave
+          </dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= leafe.leave_balance.leavetype %>
+          </dd>
+        </div>
+        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">
+            Date
+          </dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= leafe.startDate.strftime("%d %B %Y") %> - <%= leafe.endDate.strftime("%d %B %Y") %>
+          </dd>
+        </div>
+        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">
+            Duration
+          </dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= leafe.duration %> day(s)
+          </dd>
+        </div>
+        <!-- Repeat this group for each item -->
+        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">
+            Status
+          </dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <% if leafe.status == 'Pending' %>
+              <span class="badge badge-warning gap-2">
+                <%= leafe.status %>
+              </span>
+            <% elsif leafe.status == 'Approved' %>
+              <span class="badge badge-success gap-2">
+                <%= leafe.status %>
+              </span>
+            <% elsif leafe.status == 'Declined' %>
+              <span class="badge badge-error gap-2">
+                <%= leafe.status %>
+              </span>
+            <% else %>
+              <span class="badge badge-info gap-2">
+                <%= leafe.status %>
+              </span>
+            <% end %>
+          </dd>
+        </div>
+        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">
+            Comment
+          </dt>
+          <% if leafe.comment.present? %>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= leafe.comment %>
+          </dd>
+          <% else %>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            No Comment Yet
+          </dd>
+          <% end %>
+        </div>
+        <!-- End repeat -->
+      </dl>
+    </div>
+  </div>
+  <br/>
+  <% if leafe.status == 'Pending' %>
+    <div class="text-center">
+      <%= button_to 'Cancel Leave', cancel_path(leafe), method: :put, data: { confirm: 'Are you sure?' }, class: 'inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900' %>
+    </div>
+  <% end %>
 </div>

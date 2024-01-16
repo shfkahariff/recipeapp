@@ -1,14 +1,92 @@
-<p style="color: green"><%= notice %></p>
+<div class="mt-8"> <!-- Add top margin for the gap between navbar and table -->
+    <div class="flex justify-end pr-4"> <!-- Position the button to the top right -->
+        <!-- Open the modal using ID.showModal() method -->
+        <button class="btn btn-primary" onclick="my_modal_3.showModal()">Apply Leave</button>
+    </div>
 
-<h1>Leaves</h1>
+    <div class="overflow-x-auto mt-4">
+        <div class="inline-block min-w-full align-middle">
+            <div class="overflow-hidden shadow">
+                <table class="table table-zebra min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600">
+                    <thead class="bg-gray-100 dark:bg-gray-700">
+                        <tr>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Name</th>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Start Date</th>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">End Date</th>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Leave Type</th>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Status</th>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                        <!-- Your user data loop goes here -->
+                        <% @leaves.each do |leafe| %>
 
-<div id="leaves">
-  <% @leaves.each do |leafe| %>
-    <%= render leafe %>
-    <p>
-      <%= link_to "Show this leafe", leafe %>
-    </p>
-  <% end %>
+                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <td class="p-4"><%= leafe.name %></td>
+                            <td class="p-4"><%= leafe.startDate.strftime("%d-%m-%Y") %></td>
+                            <td class="p-4"><%= leafe.endDate.strftime("%d-%m-%Y") %></td>
+                            <td class="p-4"><%= leafe.leave_balance.leavetype %></td>
+                              <% if leafe.status == 'Pending' %>
+                                <td class="p-4"><span class="badge badge-warning gap-2"><%= leafe.status %></span></td>
+                              <% elsif leafe.status == 'Approved' %>
+                                <td class="p-4"><span class="badge badge-success gap-2"><%= leafe.status %></span></td>
+                              <% elsif leafe.status == 'Declined' %>
+                                <td class="p-4"><span class="badge badge-error gap-2"><%= leafe.status %></span></td>
+                              <%else%>
+                                <td class="p-4"><span class="badge badge-info gap-2"><%= leafe.status %></span></td>
+                              <% end %>
+                            <td class="p-4">
+                              <%= button_to "View Leave", '#', method: :get, class: 'inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900', onclick: "event.preventDefault(); document.getElementById('leafe-modal-#{leafe.id}').showModal();" %>
+                            </td>
+                        
+                        </tr>
+                        <!-- Repeat the above row structure for each user data -->
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
-<%= link_to "New leafe", new_leafe_path %>
+
+<!-- Modal dialog element -->
+<dialog id="my_modal_3" class="modal">
+  <!-- Modal content -->
+  <div class="modal-box w-11/12 max-w-3xl rounded-lg">
+    <!-- Modal header -->
+    <div class="modal-header pb-0 mb-0">
+      <h3 class="text-xl font-semibold dark:text-white">
+        Request Leave 
+      </h3>
+      <!-- Close button -->
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="my_modal_3.close()">✕</button>
+    </div>
+    <div class="modal-action pt-0">
+      <%= render "leaves/add_leaves_modal", leafe: @leafe %>
+    </div>
+  </div>
+</dialog>
+
+<!-- Modal for the user -->
+<% @leaves.each do |leafe| %>
+  <dialog id="leafe-modal-<%= leafe.id %>" class="fixed inset-0 flex items-center justify-center z-50 invisible opacity-0 pointer-events-none transition-all duration-300 modal">
+    <div class="modal-box w-11/12 max-w-3xl rounded-lg">
+      <!-- Modal header -->
+      <div class="modal-header">
+        <h3 class="text-xl font-semibold dark:text-white">
+            Leave Request Details
+        </h3>
+      <!-- Close button -->
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="document.getElementById('leafe-modal-<%= leafe.id %>').close()">✕</button>
+    </div>
+    <div class="modal-action">
+      <!-- Modal content rendered here -->
+      <%= render 'leaves/leafe', leafe: leafe %>
+      
+    </div>
+
+  </div>
+  </dialog>
+<% end %>

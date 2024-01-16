@@ -4,6 +4,7 @@ class LeavesController < ApplicationController
   # GET /leaves or /leaves.json
   def index
     @leaves = Leafe.all
+    @leafe = Leafe.new
   end
 
   # GET /leaves/1 or /leaves/1.json
@@ -23,14 +24,15 @@ class LeavesController < ApplicationController
   def create
     @leafe = Leafe.new(leafe_params)
 
-    #@leafe.name = current_user.name
+    @leafe.name = current_user.name
     @leafe.status = "Pending"
     @leafe.attachment = params[:leafe][:attachment]
+    @leafe.duration = (@leafe.endDate.to_date - @leafe.startDate.to_date).to_i + 1
 
     respond_to do |format|
       if @leafe.save
-        format.html { redirect_to leafe_url(@leafe), notice: "Leafe was successfully created." }
-        format.json { render :show, status: :created, location: @leafe }
+        format.html { redirect_to leaves_url, notice: "Leafe was successfully created." }
+        format.json { render :index, status: :created, location: @leafe }
       else
         Rails.logger.debug @leafe.errors.full_messages
         format.html { render :new, status: :unprocessable_entity }
@@ -50,6 +52,24 @@ class LeavesController < ApplicationController
         format.json { render json: @leafe.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def cancel
+    @leafe = Leafe.find(params[:id])
+    @leafe.update(status: "Cancelled")
+    redirect_to leaves_path, notice: "Leave cancelled."
+  end
+
+  def approve
+    @leafe = Leafe.find(params[:leafe_id])
+    @leafe.update(comment: params[:comment], status: 'Approved')
+    redirect_to admin_dashboard_path, notice: "Leave approved."
+  end
+  
+  def decline
+    @leafe = Leafe.find(params[:leafe_id])
+    @leafe.update(comment: params[:comment], status: 'Declined')
+    redirect_to admin_dashboard_path, notice: "Leave declined."
   end
 
   # DELETE /leaves/1 or /leaves/1.json

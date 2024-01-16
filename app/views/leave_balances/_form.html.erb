@@ -1,18 +1,25 @@
-
-<%= simple_form_for(@leave_balance) do |f| %>
+<%= simple_form_for(@leave_balance, url: leave_balances_path, html: { class: 'space-y-3 w-full' }) do |f| %>
   <%= f.error_notification %>
   <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
 
-  <div class="form-inputs">
-    <%= f.input :leavetype %>
-    <%= f.input :balance %>
-    <%= f.label :user_id, "Employee", class: 'col-sm-2 col-form-label' %>
-          <div class="col-sm-10">
-            <%= f.input :user_id, collection: User.all, label_method: :name, value_method: :id, prompt: "Select Employee", label: false, input_html: { class: 'form-control' } %>
-          </div>
-  </div>
+  <div class="grid grid-cols-6 gap-6">
+    <div class="col-span-6">
+        <%= f.label :user_id, 'Employee', class: 'block mb-2 text-sm font-medium text-gray-900 dark:text-white' %>
+        <%= f.input_field :user_id, collection: User.all.map { |user| ["#{user.public_id} | #{user.name}", user.id] }, prompt: "Select Employee", label: false, class: "select select-bordered w-full" %>
+    </div>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
+  
+    <div class="col-span-6">
+      <%= f.label :leavetype, 'Leave Type', class: 'block mb-2 text-sm font-medium text-gray-900 dark:text-white' %>
+      <%= f.input_field :leavetype, collection: [['Annual Leave','Annual Leave'], ['Sick Leave','Sick Leave'], ['Hospitalisation Leave','Hospitalisation Leave'], ['Maternity Leave', 'Maternity Leave'], ['Paternity Leave', 'Paternity Leave']], prompt: "Select Type of Leave", required: true, placeholder: 'John Doe', class: 'input input-bordered w-full' %>
+    </div>
+
+    <div class="col-span-6">
+      <%= f.label :balance, 'Balance', class: 'block mb-2 text-sm font-medium text-gray-900 dark:text-white' %>
+      <%= f.input_field :balance, required: true, placeholder: 'Number of days', class: 'input input-bordered w-full' %>
+    </div>
+    <div class="col-span-6 flex justify-center">
+      <%= f.button :submit, 'Create Leave Type', class: "btn hover:bg-neutral hover:text-white"  %>
+    </div>
   </div>
 <% end %>

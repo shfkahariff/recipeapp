@@ -28,10 +28,30 @@ class UsersController < ApplicationController
     redirect_to users_index_path, notice: "User deleted."
   end
 
+  def make_admin
+    @user = User.find(params[:id])
+    @user.role = "admin"
+    if @user.save
+      redirect_to users_index_path, notice: "User role updated to admin."
+    else
+      redirect_to users_index_path, alert: @user.errors.full_messages.to_sentence
+    end
+  end
+  
+  def make_hr
+    @user = User.find(params[:id])
+    @user.role = "HR"
+    if @user.save
+      redirect_to users_index_path, notice: "User role updated to HR."
+    else
+      redirect_to users_index_path, alert: @user.errors.full_messages.to_sentence
+    end
+  end
+
   private
 
   def user_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :role, :name, :profile_pic, :position, :address)
+    params.require(:user).permit(:email, :password, :password_confirmation, :role, :name, :profile_pic, :position, :address, :phoneno, :public_id)
   end
 
 end

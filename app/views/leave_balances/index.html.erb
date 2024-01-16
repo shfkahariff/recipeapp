@@ -1,14 +1,65 @@
-<p style="color: green"><%= notice %></p>
+<div class="mt-8"> <!-- Add top margin for the gap between navbar and table -->
+    <div class="flex justify-end pr-4"> <!-- Position the button to the top right -->
+        <!-- Open the modal using ID.showModal() method -->
+        <button class="btn btn-primary" onclick="my_modal_4.showModal()">Add Leave Type</button>
+    </div>
 
-<h1>Leave balances</h1>
+    <div class="overflow-x-auto mt-4">
+        <div class="inline-block min-w-full align-middle">
+            <div class="overflow-hidden shadow">
+                <table class="table table-zebra min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600">
+                    <thead class="bg-gray-100 dark:bg-gray-700">
+                        <tr>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Name, Email</th>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Leave Type</th>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Days Available</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                        <!-- Your user data loop goes here -->
+                        <% @leave_balances.each do |leave_balance| %>
 
-<div id="leave_balances">
-  <% @leave_balances.each do |leave_balance| %>
-    <%= render leave_balance %>
-    <p>
-      <%= link_to "Show this leave balance", leave_balance %>
-    </p>
-  <% end %>
+                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <td class="p-4">
+                                <div class="flex items-center">
+                                    <% if leave_balance.user.profile_pic.present? %>
+                                        <img class="w-10 h-10 rounded-full ml-2" src="<%= leave_balance.user.profile_pic %>" alt="<%= leave_balance.user.name %> avatar">
+                                    <% else %>
+                                        <img class="w-10 h-10 rounded-full ml-2" src="<%= asset_path('default-profile-icon-3.jpg') %>" alt="default avatar">
+                                    <% end %>
+                                    <div class="ml-2">
+                                        <div class="text-base font-semibold text-gray-900 dark:text-white"><%= leave_balance.user.name %></div>
+                                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= leave_balance.user.email %></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="p-4"><%= leave_balance.leavetype %></td>
+                            <td class="p-4"><%= leave_balance.balance %> Days</td>
+                        </tr>
+
+                        <!-- Repeat the above row structure for each user data -->
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
-<%= link_to "New leave balance", new_leave_balance_path %>
+<!-- Modal dialog element -->
+<dialog id="my_modal_4" class="modal">
+  <!-- Modal content -->
+  <div class="modal-box w-11/12 max-w-3xl rounded-lg">
+    <!-- Modal header -->
+    <div class="modal-header pb-0 mb-0">
+      <h3 class="text-xl font-semibold dark:text-white">
+        Add Leave Balance
+      </h3>
+      <!-- Close button -->
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="my_modal_4.close()">✕</button>
+    </div>
+    <div class="modal-action pt-0">
+      <%= render "leave_balances/form", leave_balance: @leave_balance %>
+    </div>
+  </div>
+</dialog>

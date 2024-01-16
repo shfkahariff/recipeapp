@@ -1,0 +1,172 @@
+<header class="py-5 text-center container">
+    <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="font-light text-4xl">Admin Dashboard</h1>
+        <p class="text-gray-600">Welcome to the Admin Dashboard</p>
+    </div>
+
+    <div class="flex space-x-4 mt-4">
+        <!-- Registered Employee Box-->
+        <div class="flex-1">
+            <div class="bg-white border border-gray-300 shadow-sm p-4 rounded-md">
+                <h4 class="text-lg font-medium text-gray-700">Registered Employees</h4>
+                <p class="text-gray-600"><%= User.count %> Employees</p>
+            </div>
+        </div>
+
+        <!-- Total Leave Request Box-->
+        <div class="flex-1">
+            <div class="bg-white border border-gray-300 shadow-sm p-4 rounded-md">
+                <h4 class="text-lg font-medium text-gray-700">Total Leave Requests</h4>
+                <p class="text-gray-600"><%= Leafe.count %> Leaves</p>
+            </div>
+        </div>
+
+        <!-- Pending Leave Box-->
+        <div class="flex-1">
+            <div class="bg-white border border-gray-300 shadow-sm p-4 rounded-md">
+                <h4 class="text-lg font-medium text-gray-700">Pending Leaves</h4>
+                <p class="text-gray-600"><%= Leafe.where(status: "Pending").count %> Leaves</p>
+            </div>
+        </div>
+    </div>
+
+</header>
+
+<main>
+    <div class="py-5">
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <% @leaves.each do |leafe| %>
+                    <div class="card border m-2"> <!-- Add the 'border' class here -->
+                        <div class="card-body">
+                            <div class="flex">
+                                <div class="w-1/4">
+                                    <!-- User profile_pic -->
+                                    <% user = LeaveBalance.find(leafe.leave_balance_id).user %>
+                                    <% if user.profile_pic.present? %>
+                                        <%= image_tag user.profile_pic.url, class: "w-380 h-380 object-cover rounded-full border", alt: "Profile Picture" %>
+                                    <% else %>
+                                        <%= image_tag "default-profile-icon-3.jpg", class: "w-380 h-380 object-cover rounded-full", alt: "Profile Picture" %>
+                                    <% end %>
+                                </div>
+                                <div class="w-3/4 pl-8">
+                                    <h6 class="text-xl font-medium text-gray-700"><%= leafe.name %></h6>
+                                    <p class="text-gray-600"><%= LeaveBalance.find(leafe.leave_balance_id).leavetype %></p>
+                                    <p class="text-gray-600"><%= leafe.startDate.strftime("%d %B %Y") %> - <%= leafe.endDate.strftime("%d %B %Y") %></p>
+                                    <p>
+                                        <% if leafe.status == 'Pending' %>
+                                            <span class="badge rounded-pill bg-yellow-100 text-yellow-800"><%= leafe.status %></span>
+                                        <% elsif leafe.status == 'Approved' %>
+                                            <span class="badge rounded-pill bg-green-100 text-green-800"><%= leafe.status %></span>
+                                        <% else %>
+                                            <span class="badge rounded-pill bg-red-100 text-red-800"><%= leafe.status %></span>
+                                        <% end %>
+                                    </p>
+
+                                    <br/>
+                                    <div class="flex justify-between items-center mt-2">
+                                        <div class="join join-vertical lg:join-horizontal">
+                                            <!-- Button for admin to approve and decline -->
+                                            <% if leafe.status == 'Pending' %>
+                                                <%= button_to "Approve", '#', method: :get, class: 'btn join-item btn-sm', onclick: "event.preventDefault(); document.getElementById('comment-approve-#{leafe.id}').showModal();" %>
+                                                <%= button_to "Decline", '#', method: :get, class: 'btn join-item btn-sm', onclick: "event.preventDefault(); document.getElementById('comment-decline-#{leafe.id}').showModal();" %>
+                                            <% end %>
+                                        </div>
+
+                                        <small class="text-gray-600"><%= time_ago_in_words(leafe.created_at) %> ago</small>
+                                    </div>
+                                    <div class="absolute top-0 right-0 mt-2 mr-2">
+                                        <%= button_to "View Details", '#', method: :get, class: 'btn btn-sm btn-outline', onclick: "event.preventDefault(); document.getElementById('leafe-modal-#{leafe.id}').showModal();" %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Modal for the user -->
+<% @leaves.each do |leafe| %>
+  <dialog id="leafe-modal-<%= leafe.id %>" class="fixed inset-0 flex items-center justify-center z-50 invisible opacity-0 pointer-events-none transition-all duration-300 modal">
+    <div class="modal-box w-11/12 max-w-3xl rounded-lg">
+      <!-- Modal header -->
+      <div class="modal-header">
+        <h3 class="text-xl font-semibold dark:text-white">
+            Leave Request Details
+        </h3>
+      <!-- Close button -->
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="document.getElementById('leafe-modal-<%= leafe.id %>').close()">✕</button>
+    </div>
+    <div class="modal-action">
+      <!-- Modal content rendered here -->
+      <%= render 'leaves/details_leaves', leafe: leafe %>
+      
+    </div>
+
+  </div>
+  </dialog>
+  
+    <!-- Modal for the approve -->
+  <dialog id="comment-approve-<%= leafe.id %>" class="fixed inset-0 flex items-center justify-center z-50 invisible opacity-0 pointer-events-none transition-all duration-300 modal">
+    <div class="modal-box w-11/12 max-w-3xl rounded-lg">
+      <!-- Modal header -->
+      <div class="modal-header">
+        <h3 class="text-xl font-semibold dark:text-white">
+            Are You Sure?
+        </h3>
+      <!-- Close button -->
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="document.getElementById('comment-approve-<%= leafe.id %>').close()">✕</button>
+    </div>
+    <div class="modal-action">
+      <!-- Modal content rendered here -->
+      <%= form_with(url: approve_leafe_path(leafe), method: :post, html: { class: 'space-y-3 w-full' }) do |f| %>
+        <div class="grid grid-cols-6 gap-6">
+            <div class="col-span-6">
+                <%= f.hidden_field :leafe_id, value: leafe.id %>
+                <%= f.label :comment, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+                <%= f.text_area :comment, style: "resize: none;", rows:"2", class:"textarea textarea-bordered w-full", placeholder: "Enter your comment here" %>
+            </div>
+            <div class="col-span-6 flex justify-center">
+                <%= f.submit 'Approve', class: 'btn btn-outline btn-success' %>
+            </div>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+  </dialog>
+
+    <!-- Modal for the decline -->
+  <dialog id="comment-decline-<%= leafe.id %>" class="fixed inset-0 flex items-center justify-center z-50 invisible opacity-0 pointer-events-none transition-all duration-300 modal">
+    <div class="modal-box w-11/12 max-w-3xl rounded-lg">
+      <!-- Modal header -->
+      <div class="modal-header">
+        <h3 class="text-xl font-semibold dark:text-white">
+            Are You Sure?
+        </h3>
+      <!-- Close button -->
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="document.getElementById('comment-decline-<%= leafe.id %>').close()">✕</button>
+    </div>
+    <div class="modal-action">
+      <!-- Modal content rendered here -->
+      <%= form_with(url: decline_leafe_path(leafe), method: :post, html: { class: 'space-y-3 w-full' }) do |f| %>
+        <div class="grid grid-cols-6 gap-6">
+            <div class="col-span-6">
+                <%= f.hidden_field :leafe_id, value: leafe.id %>
+                <%= f.label :comment, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+                <%= f.text_area :comment, style: "resize: none;", rows:"2", class:"textarea textarea-bordered w-full", placeholder: "Enter your comment here" %>
+            </div>
+            <div class="col-span-6 flex justify-center">
+                <%= f.submit 'Decline', class: 'btn btn-outline btn-error' %>
+            </div>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+  </dialog>
+
+<% end %>

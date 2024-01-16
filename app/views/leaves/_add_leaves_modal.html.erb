@@ -1,0 +1,35 @@
+<%= simple_form_for(@leafe, url: leaves_path, html: { class: 'space-y-3 w-full' }) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+    <div class="grid grid-cols-6 gap-6">
+        <div class="col-span-6">
+            <%= f.label :name, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+            <%= f.input_field :name, value: current_user.name, readonly: true, class:"input input-bordered w-full" %>
+            <%= f.hidden_field :user_id, value: current_user.name, readonly: true, class: "form-control" %>
+        </div>
+        <div class="col-span-6 sm:col-span-3">
+            <%= f.label :startDate, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+            <%= f.date_field :startDate, class: "input input-bordered w-full", placeholder: "Select date"  %>
+        </div>
+        <div class="col-span-6 sm:col-span-3">
+            <%= f.label :endDate, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+            <%= f.date_field :endDate, class: "input input-bordered w-full", placeholder: "Select date"  %>
+        </div>
+        <div class="col-span-6">
+            <%= f.label :leave_balance_id, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+            <%= f.input_field :leave_balance_id, collection: LeaveBalance.where(user_id: current_user.id), label_method: :leavetype, value_method: :id, prompt: "Select Leave Type", class:"select select-bordered w-full" %>
+        </div>
+        <div class="col-span-6">
+            <%= f.label :attachment, class:"block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+            <%= f.input_field :attachment, class:"file-input file-input-bordered w-full", as: :file  %>
+        </div>  
+        <div class="col-span-6">
+            <%= f.label :notes, class:"block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+            <%= f.text_area :notes, style: "resize: none;", rows:"2", class:"textarea textarea-bordered w-full", placeholder:"Your Reason or Description" %>
+        </div>
+        <div class="col-span-6 flex justify-center">
+            <%= f.button :submit, class: "btn hover:bg-neutral hover:text-white" %>
+        </div>
+    </div>
+<% end %>

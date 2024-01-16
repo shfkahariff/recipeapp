@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  after_create :generate_public_id
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -15,6 +16,12 @@ class User < ApplicationRecord
 
     def set_default_role
       self.role ||= :employee
+    end
+
+  private
+    def generate_public_id
+      self.public_id = "EMP#{sprintf '%04d', self.id}"
+      self.save
     end
 
 end

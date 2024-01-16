@@ -4,6 +4,7 @@ class LeaveBalancesController < ApplicationController
   # GET /leave_balances or /leave_balances.json
   def index
     @leave_balances = LeaveBalance.all
+    @leave_balance = LeaveBalance.new
   end
 
   # GET /leave_balances/1 or /leave_balances/1.json
@@ -25,8 +26,8 @@ class LeaveBalancesController < ApplicationController
 
     respond_to do |format|
       if @leave_balance.save
-        format.html { redirect_to leave_balance_url(@leave_balance), notice: "Leave balance was successfully created." }
-        format.json { render :show, status: :created, location: @leave_balance }
+        format.html { redirect_to leave_balances_url, notice: "Leave balance was successfully created." }
+        format.json { render :index, status: :created, location: @leave_balance }
       else
         Rails.logger.debug @leave_balance.errors.full_messages
         format.html { render :new, status: :unprocessable_entity }
