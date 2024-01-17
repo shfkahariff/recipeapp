@@ -1,0 +1,80 @@
+<div class="simple-calendar ">
+  <div class="calendar-heading flex justify-between items-center mb-6">
+    <time datetime="<%= start_date.strftime('%Y-%m') %>" class="calendar-title text-2xl font-bold"><%= t('date.month_names')[start_date.month] %> <%= start_date.year %></time>
+
+    <nav class="join join-horizontal border">
+      <%= link_to "⟨", calendar.url_for_previous_view, class: "btn join-item" %>
+      <%= link_to "Today", calendar.url_for_today_view, class: "btn join-item" %>
+      <%= link_to "⟩", calendar.url_for_next_view, class: "btn join-item" %>
+    </nav>
+  </div>
+
+  <table class="table-auto w-full">
+    <thead>
+      <tr>
+        <% date_range.slice(0, 7).each do |day| %>
+          <th class="border px-4 py-2"><%= t('date.abbr_day_names')[day.wday] %></th>
+        <% end %>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% date_range.each_slice(7) do |week| %>
+      <tr>
+        <% week.each do |day| %>
+          <%= content_tag :td, class: "border px-4 py-2 w-32 h-32 relative" do %>
+            <% if day.month == start_date.month %>
+              <button data-date="<%= day.strftime('%Y-%m-%d') %>" onclick="openModal(this)" class="absolute top-2 left-2 rounded-full w-6 h-6 hover:bg-blue-200">
+                <%= day.day %>
+              </button>
+
+              <% instance_exec(day, calendar.sorted_events_for(day)) do |day, events| %>
+                <!-- Render the events for the day here, without including the date number -->
+                <% events.each do |event| %>
+                  <% if event.is_a?(Leafe) %>
+                    <% if event.status == "Approved"%>
+                      <div class= "px-2 py-1 text-sm font-semibold rounded-lg mt-1 overflow-hidden border border-blue-200 text-blue-800 bg-blue-100">
+                        <%= event.name %>
+                      </div>
+                    <% end %>
+                  <% else %>
+                    <div class= "px-2 py-1 text-sm font-semibold rounded-lg mt-1 overflow-hidden border border-purple-200 text-purple-800 bg-purple-100">
+                      <%= event.holidaytype %>
+                    </div>
+                  <% end %>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+
+<dialog id="dialog" class="fixed inset-0 flex items-center justify-center z-50 invisible opacity-0 pointer-events-none transition-all duration-300 modal">
+    <div class="modal-box w-11/12 max-w-3xl rounded-lg">
+      <!-- Modal header -->
+      <div class="modal-header">
+        <h3 class="text-xl font-semibold dark:text-white">
+            Add Public Holiday
+        </h3>
+      <!-- Close button -->
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="document.getElementById('dialog').close()">✕</button>
+    </div>
+    <div class="modal-action">
+      <%= render "holidays/form", holiday: Holiday.new %>
+      
+    </div>
+  </div>
+  </dialog>
+
+<script>
+  function openModal(button) {
+    const date = button.getAttribute("data-date");
+    document.getElementById('dialog').showModal();
+    document.getElementById('holiday_date').value = date;
+    document.getElementById('end_date').value = date;
+  }
+</script>

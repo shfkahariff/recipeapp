@@ -5,6 +5,14 @@ class Leafe < ApplicationRecord
     mount_uploader :attachment, AttachmentUploader
     validates :name, presence: true
 
+    def start_time
+        self.startDate ##Where 'start' is a attribute of type 'Date' accessible through MyModel's relationship
+    end
+
+    def end_time
+        self.endDate ##Where 'start' is a attribute of type 'Date' accessible through MyModel's relationship
+    end
+
     private
     def status_approved
         self.status = "Approved"

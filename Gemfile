@@ -78,3 +78,5 @@ gem "simple_form"
 gem "devise", "~> 4.9"
 
 gem "carrierwave", "~> 3.0"
+
+gem "simple_calendar", "~> 3.0"

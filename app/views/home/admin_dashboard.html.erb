@@ -65,7 +65,7 @@
 
                                     <br/>
                                     <div class="flex justify-between items-center mt-2">
-                                        <div class="join join-vertical lg:join-horizontal">
+                                        <div class="join join-horizontal">
                                             <!-- Button for admin to approve and decline -->
                                             <% if leafe.status == 'Pending' %>
                                                 <%= button_to "Approve", '#', method: :get, class: 'btn join-item btn-sm', onclick: "event.preventDefault(); document.getElementById('comment-approve-#{leafe.id}').showModal();" %>

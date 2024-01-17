@@ -25,8 +25,8 @@ class HolidaysController < ApplicationController
 
     respond_to do |format|
       if @holiday.save
-        format.html { redirect_to holiday_url(@holiday), notice: "Holiday was successfully created." }
-        format.json { render :show, status: :created, location: @holiday }
+        format.html { redirect_to root_path, notice: "Holiday was successfully created." }
+        format.json { render :index, status: :created, location: @holiday }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @holiday.errors, status: :unprocessable_entity }
@@ -65,6 +65,6 @@ class HolidaysController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def holiday_params
-      params.require(:holiday).permit(:type, :startholiday, :endholiday)
+      params.require(:holiday).permit(:holidaytype, :startholiday, :endholiday)
     end
 end
