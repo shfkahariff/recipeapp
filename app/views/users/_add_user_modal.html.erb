@@ -1,5 +1,5 @@
 <!-- app/views/shared/_registration_form.html.erb -->
-<%= simple_form_for(@user, url: users_path, html: { class: 'space-y-3 w-full' }) do |f| %>
+<%= simple_form_for(@user, url: users_path(@user), html: { class: 'space-y-3 w-full' }) do |f| %>
   <%= f.error_notification %>
 
   <div class="grid grid-cols-6 gap-6">

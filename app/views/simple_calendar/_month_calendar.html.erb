@@ -34,13 +34,45 @@
                   <% if event.is_a?(Leafe) %>
                     <% if event.status == "Approved"%>
                       <div class= "px-2 py-1 text-sm font-semibold rounded-lg mt-1 overflow-hidden border border-blue-200 text-blue-800 bg-blue-100">
-                        <%= event.name %>
+                        <%= link_to event.name, '#', method: :get, onclick: "event.preventDefault(); document.getElementById('leafedetails-modal-#{event.id}').showModal();" %>
                       </div>
+                      <dialog id="leafedetails-modal-<%= event.id %>" class="fixed inset-0 flex items-center justify-center z-50 invisible opacity-0 pointer-events-none transition-all duration-300 modal">
+                          <div class="modal-box w-11/12 max-w-3xl rounded-lg">
+                            <!-- Modal header -->
+                            <div class="modal-header">
+                              <h3 class="text-xl font-semibold dark:text-white">
+                                  Leave Request Details
+                              </h3>
+                            <!-- Close button -->
+                            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="document.getElementById('leafedetails-modal-<%= event.id %>').close()">✕</button>
+                          </div>
+                          <div class="modal-action">
+                            <!-- Modal content rendered here -->
+                            <%= render 'leaves/leafe', leafe: event %>
+                          </div>
+                        </div>
+                      </dialog>
                     <% end %>
                   <% else %>
                     <div class= "px-2 py-1 text-sm font-semibold rounded-lg mt-1 overflow-hidden border border-purple-200 text-purple-800 bg-purple-100">
-                      <%= event.holidaytype %>
+                      <%= link_to event.holidaytype, '#', method: :get, onclick: "event.preventDefault(); document.getElementById('holiday-modal-#{event.id}').showModal();" %>
                     </div>
+                    <dialog id="holiday-modal-<%= event.id %>" class="fixed inset-0 flex items-center justify-center z-50 invisible opacity-0 pointer-events-none transition-all duration-300 modal">
+                      <div class="modal-box w-11/12 max-w-3xl rounded-lg">
+                            <!-- Modal header -->
+                        <div class="modal-header">
+                          <h3 class="text-xl font-semibold dark:text-white">
+                            Public Holiday Details
+                          </h3>
+                            <!-- Close button -->
+                          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="document.getElementById('holiday-modal-<%= event.id %>').close()">✕</button>
+                        </div>
+                        <div class="modal-action">
+                            <!-- Modal content rendered here -->
+                            <%= render 'holidays/holiday', holiday: event %>
+                        </div>
+                      </div>
+                    </dialog>
                   <% end %>
                 <% end %>
               <% end %>
