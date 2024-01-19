@@ -1,0 +1,35 @@
+<% if current_user %>
+  <div class="dropdown dropdown-end relative">
+    <button class="btn btn-ghost btn-circle relative">
+      <div class="indicator">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        </svg>
+        <span class="badge badge-xs badge-primary indicator-item">
+          <%= @unread.count >= 9 ? "9+" : @unread.count %>
+        </span>
+      </div>
+    </button>
+    <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-2xl bg-white dark:bg-gray-800 rounded-lg w-80">
+      <% @unread.each do |notification| %>
+        <li class="hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300 ease-in-out">
+          <%= link_to notification.to_notification.message, notification.to_notification.url, class: "block py-2 px-3 text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap" %>
+        </li>
+      <% end %>
+      <% if @read.count > 0 && @unread.count > 0 %>
+        <li class="flex justify-between items-center py-2 px-3 text-sm font-medium text-gray-700 dark:text-gray-300">
+          <div class="divider"></div>
+        </li>
+      <% elsif @read.count + @unread.count == 0 %>
+        <li class="py-2 px-3 text-sm font-medium text-gray-700 dark:text-gray-300">
+          No notifications yet.
+        </li>
+      <% end %>
+      <% @read.each do |notification| %>
+        <li class="hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300 ease-in-out">
+          <%= link_to notification.to_notification.message, notification.to_notification.url, class: "block py-2 px-3 text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap" %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

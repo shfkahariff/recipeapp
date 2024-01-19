@@ -9,6 +9,7 @@ class LeavesController < ApplicationController
 
   # GET /leaves/1 or /leaves/1.json
   def show
+    mark_as_read
   end
 
   # GET /leaves/new
@@ -91,5 +92,12 @@ class LeavesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def leafe_params
       params.require(:leafe).permit(:startDate, :endDate, :duration, :status, :notes, :attachment, :name, :comment, :leave_balance_id)
+    end
+
+    def mark_as_read
+      if current_user.admin? || @leafe.notifications_as_leafe.where(recipient: current_user).exists?
+        notifications_to_mark_as_read = @leafe.notifications_as_leafe.where(recipient: current_user)
+        notifications_to_mark_as_read.update_all(read_at: Time.zone.now)
+      end
     end
 end

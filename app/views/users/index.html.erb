@@ -1,4 +1,7 @@
 <div class="mt-8"> <!-- Add top margin for the gap between navbar and table -->
+    <h1 class="text-4xl font-bold text-center">List of Registered Users</h1><br/>
+	  <p class="text-gray-600 text-center">Welcome to the User List. You can view the list of registered users.</p>
+
     <div class="flex justify-end pr-4"> <!-- Position the button to the top right -->
         <!-- Open the modal using ID.showModal() method -->
         <button class="btn btn-primary" onclick="my_modal_1.showModal()">Add User</button>
@@ -91,7 +94,11 @@
     <div class="modal-action">
       <!-- Modal content rendered here -->
       <%= render 'users/user', user: user %>
-      
+    </div>
+    <br/>
+    <div class="flex justify-center items-center mt-auto">
+        <%= button_to 'Make Admin', make_admin_path(user), method: :post, class: 'btn bg-gray-200 text-gray-800 hover:bg-gray-400' %>
+        <%= button_to 'Make HR', make_hr_path(user), method: :post, class: 'btn bg-gray-200 text-gray-800 hover:bg-gray-400' %>
     </div>
 
   </div>

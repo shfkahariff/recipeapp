@@ -5,8 +5,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_many  :leaves, through: :leave_balances
+  has_many  :leaves, through: :leave_balances, dependent: :destroy
   has_many  :leave_balances, dependent: :destroy
+  has_many :notifications, as: :recipient, dependent: :destroy
 
   mount_uploader :profile_pic, ProfilePicUploader
   validates :email, presence: true

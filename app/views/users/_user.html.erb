@@ -29,8 +29,5 @@
         <%= f.label :position, 'Position', class: 'block mb-2 text-sm font-medium text-gray-900 dark:text-white' %>
         <%= f.input_field :position, class: 'input input-bordered w-full max-w-xs', readonly: true %>
     </div>
-    <div class="flex justify-center items-center space-x-4 col-span-6">
-        <%= button_to 'Make Admin', make_admin_path(user), method: :post, class: 'btn bg-gray-200 text-gray-800 hover:bg-gray-400' %>
-        <%= button_to 'Make HR', make_hr_path(user), method: :post, class: 'btn bg-gray-200 text-gray-800 hover:bg-gray-400' %>
-    </div>
+ </div>
 <% end %>
