@@ -10,6 +10,10 @@ class ApplicationController < ActionController::Base
         devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:name, :email, :password, :current_password, :phoneno, :address, :position, :profile_pic, :role, :public_id)}
     end
 
+    def after_sign_in_path_for(resource)
+        home_index_path
+    end
+
     private
     def set_notifications
         @unread = Notification.where(recipient: current_user).newest_first.limit(9).unread

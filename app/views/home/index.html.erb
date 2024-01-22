@@ -3,7 +3,7 @@
 	<p class="text-gray-600">Welcome to the Employee Calendar. You can view the events and absent employee of the day. </p>
 
 	<br/>
-<%= month_calendar(events: @leaves + @holidays) do |date, events| %>
+	<%= month_calendar(events: @leaves + @holidays) do |date, events| %>
 		<div class="day">
 			<%= date.day %>
 		</div>
@@ -19,7 +19,5 @@
 		</div>
 	<% end %>
 
-
 </div>
 <br><br><br>
-

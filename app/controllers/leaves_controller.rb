@@ -3,7 +3,11 @@ class LeavesController < ApplicationController
 
   # GET /leaves or /leaves.json
   def index
-    @leaves = Leafe.all
+    if current_user.role == 'admin' || current_user.role == 'HR'
+      @leaves = Leafe.all
+    else
+      @leaves = Leafe.where(name: current_user.name)
+    end
     @leafe = Leafe.new
   end
 
@@ -50,6 +54,30 @@ class LeavesController < ApplicationController
         format.json { render :show, status: :ok, location: @leafe }
       else
         format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @leafe.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def apply_emergency_leave
+    @leafe = Leafe.new
+  end
+
+  def create_emergency_leave
+    @leafe = Leafe.new(leafe_params)
+  
+    @leafe.name = current_user.name
+    @leafe.status = "Pending"
+    @leafe.attachment = params[:leafe][:attachment]
+    @leafe.duration = (@leafe.endDate.to_date - @leafe.startDate.to_date).to_i + 1
+  
+    respond_to do |format|
+      if @leafe.save
+        format.html { redirect_to leaves_url, notice: "Leafe was successfully created." }
+        format.json { render :index, status: :created, location: @leafe }
+      else
+        Rails.logger.debug @leafe.errors.full_messages
+        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @leafe.errors, status: :unprocessable_entity }
       end
     end

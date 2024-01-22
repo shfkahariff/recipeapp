@@ -1,0 +1,16 @@
+<table class="table border table-zebra">
+  <thead class="bg-base-200">
+    <tr>
+      <th>Leave Type</th>
+      <th>Balance</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% leave_balances.each do |leave_balance| %>
+      <tr>
+        <td><%= leave_balance.leavetype %></td>
+        <td><%= leave_balance.balance %> Days</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

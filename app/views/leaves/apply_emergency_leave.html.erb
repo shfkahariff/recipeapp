@@ -1,11 +1,11 @@
 <section class="bg-white dark:bg-gray-900">
-  <%= simple_form_for(@leafe) do |f| %>
+  <%= simple_form_for(@leafe, url:  create_emergency_leave_leaves_path) do |f| %>
   <%= f.error_notification %>
   <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
 
   <div class="form-inputs">
     <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
-            <h1 class="text-4xl font-bold text-center">Apply a Leave</h1><br/>
+            <h1 class="text-4xl font-bold text-center">Apply Emergency Leave</h1><br/>
           
               <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                   <div class="w-full">
@@ -27,7 +27,13 @@
                   </div>
                   <div class="sm:col-span-2">
                     <%= f.label :leave_balance_id, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-                    <%= f.input_field :leave_balance_id, collection: LeaveBalance.where(user_id: current_user.id).where.not(balance: 0).or(LeaveBalance.where(leavetype: "Unpaid Leave")), label_method: :leavetype, value_method: :id, prompt: "Select Leave Type", class:"bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+                    <%= f.input_field :leave_balance_id, 
+                        collection: LeaveBalance.where(user_id: current_user.id, leavetype: "Annual Leave").where.not(balance: 0), 
+                        label_method: ->(leave_balance) { "Emergency Leave" }, 
+                        value_method: :id, 
+                        prompt: "Select Leave Type", 
+                        class:"bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                    %>
                   </div>
                   <div class="sm:col-span-2">
                     <%= f.label :attachment, class:"block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>

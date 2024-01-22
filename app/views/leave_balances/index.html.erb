@@ -15,29 +15,30 @@
                         <tr>
                             <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Name, Email</th>
                             <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Leave Type</th>
-                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Days Available</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
                         <!-- Your user data loop goes here -->
-                        <% @leave_balances.each do |leave_balance| %>
-
+                        <% @users.each do |user| %>
                         <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
                             <td class="p-4">
                                 <div class="flex items-center">
-                                    <% if leave_balance.user.profile_pic.present? %>
-                                        <img class="w-10 h-10 rounded-full ml-2" src="<%= leave_balance.user.profile_pic %>" alt="<%= leave_balance.user.name %> avatar">
+                                    <% if user.profile_pic.present? %>
+                                        <img class="w-10 h-10 rounded-full ml-2" src="<%= user.profile_pic %>" alt="<%= user.name %> avatar">
                                     <% else %>
                                         <img class="w-10 h-10 rounded-full ml-2" src="<%= asset_path('default-profile-icon-3.jpg') %>" alt="default avatar">
                                     <% end %>
                                     <div class="ml-2">
-                                        <div class="text-base font-semibold text-gray-900 dark:text-white"><%= leave_balance.user.name %></div>
-                                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= leave_balance.user.email %></div>
+                                        <div class="text-base font-semibold text-gray-900 dark:text-white"><%= user.name %></div>
+                                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400"><%= user.email %></div>
                                     </div>
                                 </div>
                             </td>
-                            <td class="p-4"><%= leave_balance.leavetype %></td>
-                            <td class="p-4"><%= leave_balance.balance %> Days</td>
+                            <td class="p-4">
+                                <%= button_to "View Leave Type", '#', method: :get, class: 'inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900', onclick: "event.preventDefault(); document.getElementById('leavetype-modal-#{user.id}').showModal();" %>
+                            </td>
+
+                            
                         </tr>
 
                         <!-- Repeat the above row structure for each user data -->
@@ -66,3 +67,22 @@
     </div>
   </div>
 </dialog>
+
+<% @users.each do |user| %>
+<dialog id="leavetype-modal-<%= user.id %>" class="fixed inset-0 flex items-center justify-center z-50 invisible opacity-0 pointer-events-none transition-all duration-300 modal">
+    <div class="modal-box w-11/12 max-w-3xl rounded-lg">
+                                <!-- Modal header -->
+        <div class="modal-header">
+            <h3 class="text-xl font-semibold dark:text-white">
+                List of Leave Type Available
+            </h3>
+                                <!-- Close button -->
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="document.getElementById('leavetype-modal-<%= user.id %>').close()">✕</button>
+        </div>
+        <div class="modal-action">
+                                <!-- Modal content rendered here -->
+            <%= render 'leave_balances/view_user_balance', leave_balances: user.leave_balances %>
+        </div>
+    </div>
+</dialog>
+<% end %>

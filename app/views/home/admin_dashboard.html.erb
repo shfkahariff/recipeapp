@@ -37,7 +37,7 @@
         <div class="container mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <% @leaves.each do |leafe| %>
-                    <div class="card border m-2"> <!-- Add the 'border' class here -->
+                    <div class="card border m-2" id = "user-<%= leafe %>"> <!-- Add the 'border' class here -->
                         <div class="card-body">
                             <div class="flex">
                                 <div class="w-1/4">

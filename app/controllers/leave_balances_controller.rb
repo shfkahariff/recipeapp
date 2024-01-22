@@ -4,6 +4,7 @@ class LeaveBalancesController < ApplicationController
   # GET /leave_balances or /leave_balances.json
   def index
     @leave_balances = LeaveBalance.all
+    @users = User.all
     @leave_balance = LeaveBalance.new
   end
 

@@ -8,6 +8,13 @@ class Leafe < ApplicationRecord
 
     mount_uploader :attachment, AttachmentUploader
     validates :name, presence: true
+    validates :startDate, presence: true
+    validates :endDate, presence: true
+    validates :duration, presence: true
+    validates :reason, presence: true
+    validates :status, presence: true
+    validates :attachment, presence: true, if: :sick_leave?
+
 
     has_noticed_notifications model_name: 'Notification'
     has_many :notifications, through: :leave_balance, dependent: :destroy
@@ -28,7 +35,11 @@ class Leafe < ApplicationRecord
 
     def deduct_leave_balance
         leave_balance = LeaveBalance.find(self.leave_balance_id)
-        leave_balance.balance = leave_balance.balance - self.duration.to_i
+        if leave_balance.leavetype == "Unpaid Leave"
+            leave_balance.balance = leave_balance.balance + self.duration.to_i
+        else
+            leave_balance.balance = leave_balance.balance - self.duration.to_i
+        end
         leave_balance.save
     end
 
@@ -47,5 +58,9 @@ class Leafe < ApplicationRecord
 
     def cleanup_notifications
         notifications_as_leafe.destroy_all
+    end
+
+    def sick_leave?
+        self.leave_balance.leavetype == "Sick Leave"
     end
 end
