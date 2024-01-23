@@ -1,3 +1,16 @@
-<%= render "form", leafe: @leafe %>
+<div class="p-5 mb-4 bg-neutral-focus rounded-xl">
+  <div class="container mx-auto py-5">
 
+    <div class="flex flex-wrap -mx-2 bg-gray-100 shadow-md rounded-lg p-4">
+      <!-- Left column for the form -->
+      <div class="w-full md:w-1/2 px-2">
+        <%= render "form", leafe: @leafe %>
+      </div>
 
+      <!-- Right column for the pie chart -->
+      <div class="w-full md:w-1/2 px-2 flex items-center">
+        <h4 class="text-center text-lg font-semibold">Leave Balance</h4>
+        <%= pie_chart current_user.leave_balances.where.not(leavetype: "Unpaid Leave").group(:leavetype).sum(:balance), height: "400px", legend: "bottom", suffix: " days" %>  </div>
+    </div>
+  </div>
+</div>

@@ -9,6 +9,7 @@ class LeavesController < ApplicationController
       @leaves = Leafe.where(name: current_user.name)
     end
     @leafe = Leafe.new
+    @pagy, @leaves = pagy(@leaves, items: 5)
   end
 
   # GET /leaves/1 or /leaves/1.json
@@ -32,16 +33,21 @@ class LeavesController < ApplicationController
     @leafe.name = current_user.name
     @leafe.status = "Pending"
     @leafe.attachment = params[:leafe][:attachment]
-    @leafe.duration = (@leafe.endDate.to_date - @leafe.startDate.to_date).to_i + 1
-
-    respond_to do |format|
-      if @leafe.save
-        format.html { redirect_to leaves_url, notice: "Leafe was successfully created." }
-        format.json { render :index, status: :created, location: @leafe }
-      else
-        Rails.logger.debug @leafe.errors.full_messages
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @leafe.errors, status: :unprocessable_entity }
+    if @leafe.startDate.nil? || @leafe.endDate.nil?
+      @leafe.errors.add(:base, "Start date and end date cannot be empty")
+      render :new
+    else
+      @leafe.duration = (@leafe.endDate.to_date - @leafe.startDate.to_date).to_i + 1
+    
+      respond_to do |format|
+        if @leafe.save
+          format.html { redirect_to leaves_url, notice: "Leafe was successfully created." }
+          format.json { render :index, status: :created, location: @leafe }
+        else
+          Rails.logger.debug @leafe.errors.full_messages
+          format.html { render :new, status: :unprocessable_entity }
+          format.json { render json: @leafe.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -123,7 +129,7 @@ class LeavesController < ApplicationController
     end
 
     def mark_as_read
-      if current_user.admin? || @leafe.notifications_as_leafe.where(recipient: current_user).exists?
+      if current_user
         notifications_to_mark_as_read = @leafe.notifications_as_leafe.where(recipient: current_user)
         notifications_to_mark_as_read.update_all(read_at: Time.zone.now)
       end

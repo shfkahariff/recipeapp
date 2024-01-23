@@ -11,7 +11,6 @@ class Leafe < ApplicationRecord
     validates :startDate, presence: true
     validates :endDate, presence: true
     validates :duration, presence: true
-    validates :reason, presence: true
     validates :status, presence: true
     validates :attachment, presence: true, if: :sick_leave?
 

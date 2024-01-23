@@ -1,7 +1,8 @@
+<% if user_signed_in? && current_user.admin? %>
 <div class="navbar bg-base-300">
   <div class="navbar-start">
     <div class="flex-1">
-    <a class="text-xl" href="<%= home_index_path %>">daisyUI</a>
+    <a class="text-xl" href="<%= home_index_path %>">DNSVault</a>
   </div>
   </div>
   <div class="navbar-center">
@@ -41,6 +42,47 @@
     </li>
   </ul>
 </div>
-
-
 </div>
+<% elsif user_signed_in? && current_user.employee? %>
+<div class="navbar bg-base-300">
+  <div class="navbar-start">
+    <div class="flex-1">
+    <a class="text-xl" href="<%= home_index_path %>">DNSVault</a>
+  </div>
+  </div>
+  <div class="navbar-center">
+    <a class="btn btn-ghost text-xl" href="<%= leaves_path %>">Leave</a>
+    <a class="btn btn-ghost text-xl" href="<%= new_leafe_path %>">Apply Leave</a>
+    <a class="btn btn-ghost text-xl" href="<%= apply_emergency_leave_path %>">Apply Emergency Leave</a>
+  </div>
+  <div class="navbar-end">
+    <%= render 'layouts/notifications' %>
+  </div>
+<div class="dropdown dropdown-end">
+  <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+    <div class="w-8 rounded-full">
+      <% if current_user&.profile_pic&.present? %>
+        <%= image_tag current_user.profile_pic.url, alt: "Profile Picture" %>
+      <% else %>
+        <%= image_tag "default-profile-icon-3.jpg", alt: "Profile Picture" %>
+      <% end %>
+    </div>
+  </div>
+  <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-2xl bg-white dark:bg-gray-800 rounded-lg w-52">
+    <li class="mb-2">
+      <span class="text-sm text-gray-600 dark:text-gray-300">Hi, <%= current_user&.name %></span>
+    </li>
+    <li>
+      <a class="flex justify-between items-center py-2 px-3 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md" href="<%= home_profile_path %>">
+        Profile
+      </a>
+    </li>
+    <li>
+      <a class="flex justify-between items-center py-2 px-3 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md" href="<%= destroy_user_session_path %>" data-turbo-method="delete">
+        Logout
+      </a>
+    </li>
+  </ul>
+</div>
+</div>
+<% end %>

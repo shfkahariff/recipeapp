@@ -30,6 +30,15 @@
         </div>
     </div>
 
+    <br/>
+    <div class="row">
+        <!--pie chart for laeve status pending, approved, declined-->
+        <h3 class="fw-light">Leave Chart</h3>
+        <!-- <% custom_data = {"Custom Name 1" => Leafe.where(status: "Pending").count, "Custom Name 2" => Leafe.where(status: "Approved").count, "Custom Name 3" => Leafe.where(status: "Declined").count} %>
+        <%= column_chart custom_data %> -->
+        <%= column_chart Leafe.group(:status).count %>
+    </div>
+
 </header>
 
 <main>

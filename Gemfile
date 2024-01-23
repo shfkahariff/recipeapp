@@ -81,3 +81,5 @@ gem "carrierwave", "~> 3.0"
 
 gem "simple_calendar", "~> 3.0"
 gem "noticed", "~> 1.6"
+gem "chartkick"
+gem "pagy"
