@@ -25,8 +25,14 @@
                       <%= f.date_field :endDate, class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: "Select date"  %>
                   </div>
                   <div class="sm:col-span-2">
-                    <%= f.label :leave_balance_id, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-                   <%= f.input_field :leave_balance_id, collection: LeaveBalance.where(user_id: current_user.id).where.not(balance: 0).or(LeaveBalance.where(leavetype: "Unpaid Leave").where.not(id: LeaveBalance.where(user_id: current_user.id, leavetype: "Annual Leave").where('balance > ?', 0).pluck(:id))), label_method: :leavetype, value_method: :id, prompt: "Select Leave Type", class:"bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+                    <% 
+                      leave_balances = LeaveBalance.where(user_id: current_user.id).where.not(balance: 0).to_a
+                      if LeaveBalance.where(user_id: current_user.id, leavetype: "Annual Leave", balance: 0).exists?
+                        leave_balances << LeaveBalance.find_by(user_id: current_user.id, leavetype: "Unpaid Leave")
+                      end
+                    %>
+
+                    <%= f.input_field :leave_balance_id, collection: leave_balances, label_method: :leavetype, value_method: :id, prompt: "Select Leave Type", class:"bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
                   </div>
                   <div class="sm:col-span-2">
                     <%= f.label :attachment, class:"block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
@@ -52,5 +58,3 @@
 
 
     
-
-  

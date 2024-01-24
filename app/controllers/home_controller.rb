@@ -19,5 +19,6 @@ class HomeController < ApplicationController
     @users = User.all
     @leaves = Leafe.all
     @leave_balances = LeaveBalance.all
+    @pagy, @leaves = pagy(@leaves, items: 10)
   end
 end

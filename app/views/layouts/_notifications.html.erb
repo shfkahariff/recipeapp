@@ -13,11 +13,11 @@
     <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-2xl bg-white dark:bg-gray-800 rounded-lg w-80">
       <% @unread.each do |notification| %>
         <li class="hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300 ease-in-out">
-          <%= link_to notification.to_notification.message, notification.to_notification.url, class: "block py-2 px-3 text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap" %>
+          <%= link_to notification.to_notification.message, notification.to_notification.url, class: "block py-2 px-3 text-sm font-medium text-gray-700 dark:text-gray-300" %>
         </li>
       <% end %>
       <% if @read.count > 0 && @unread.count > 0 %>
-        <li class="flex justify-between items-center py-2 px-3 text-sm font-medium text-gray-700 dark:text-gray-300">
+        <li class="items-center py-2 px-3 text-sm font-medium text-gray-700 dark:text-gray-300">
           <div class="divider"></div>
         </li>
       <% elsif @read.count + @unread.count == 0 %>
@@ -27,7 +27,7 @@
       <% end %>
       <% @read.each do |notification| %>
         <li class="hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300 ease-in-out">
-          <%= link_to notification.to_notification.message, notification.to_notification.url, class: "block py-2 px-3 text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap" %>
+          <%= link_to notification.to_notification.message, notification.to_notification.url, class: "block py-2 px-3 text-sm font-medium text-gray-700 dark:text-gray-300" %>
         </li>
       <% end %>
     </ul>
